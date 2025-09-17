@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+tech.insight.etcd2redis.starter.etcd.EtcdRedisConfiguration

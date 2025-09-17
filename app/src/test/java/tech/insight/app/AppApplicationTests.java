@@ -1,10 +1,10 @@
-package club.shengsheng.adapter_demo;
+package tech.insight.app;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AdapterDemoApplicationTests {
+class AppApplicationTests {
 
     @Test
     void contextLoads() {

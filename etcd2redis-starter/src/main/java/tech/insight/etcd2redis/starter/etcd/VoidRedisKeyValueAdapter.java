@@ -1,4 +1,4 @@
-package club.shengsheng.adapter_demo.controller;
+package tech.insight.etcd2redis.starter.etcd;
 
 import org.springframework.data.redis.core.RedisKeyValueAdapter;
 
@@ -9,5 +9,6 @@ public class VoidRedisKeyValueAdapter extends RedisKeyValueAdapter {
 
     @Override
     public void afterPropertiesSet() {
+       
     }
 }

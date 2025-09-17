@@ -1,9 +1,8 @@
-package club.shengsheng.adapter_demo.controller;
+package tech.insight.etcd2redis.starter.etcd;
 
 import io.etcd.jetcd.ByteSequence;
 import io.etcd.jetcd.Client;
 import io.etcd.jetcd.kv.GetResponse;
-import io.etcd.jetcd.kv.PutResponse;
 import org.springframework.data.redis.connection.BitFieldSubCommands;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.ValueOperations;
@@ -19,21 +18,20 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author gongxuanzhangmelt@gmail.com
  **/
-public class EtcdRedisValueOperations implements ValueOperations<String, String> {
+public class EtcdValueOperations implements ValueOperations<String, String> {
 
     private final Client client;
 
-    public EtcdRedisValueOperations(Client client) {
+    public EtcdValueOperations(Client client) {
         this.client = client;
     }
 
     @Override
     public void set(String key, String value) {
-        ByteSequence tecdKey = ByteSequence.from(key, StandardCharsets.UTF_8);
-        ByteSequence tecdValue = ByteSequence.from(value, StandardCharsets.UTF_8);
-        CompletableFuture<PutResponse> putFuture = client.getKVClient().put(tecdKey, tecdValue);
+        ByteSequence etcdKey = ByteSequence.from(key, StandardCharsets.UTF_8);
+        ByteSequence etcdValue = ByteSequence.from(value, StandardCharsets.UTF_8);
         try {
-            putFuture.get();
+            client.getKVClient().put(etcdKey, etcdValue).get();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -42,39 +40,23 @@ public class EtcdRedisValueOperations implements ValueOperations<String, String>
 
     @Override
     public String get(Object key) {
-        CompletableFuture<GetResponse> future = client.getKVClient().get(ByteSequence.from(key.toString(),
-            StandardCharsets.UTF_8));
+        ByteSequence etcdKey = ByteSequence.from(key.toString(), StandardCharsets.UTF_8);
+        CompletableFuture<GetResponse> getResponseCompletableFuture = client.getKVClient().get(etcdKey);
+        GetResponse getResponse = null;
         try {
-            GetResponse response = future.get();
-            if (response.getCount() == 0) {
+            getResponse = getResponseCompletableFuture.get();
+            if (getResponse.getCount() > 0) {
+                return getResponse.getKvs().get(0).getValue().toString(StandardCharsets.UTF_8);
+            } else {
                 return null;
             }
-            return response.getKvs().get(0).getValue().toString(StandardCharsets.UTF_8);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
+
     }
 
-    @Override
-    public String getAndDelete(String key) {
-        return "";
-    }
-
-    @Override
-    public String getAndExpire(String key, long timeout, TimeUnit unit) {
-        return "";
-    }
-
-    @Override
-    public String getAndExpire(String key, Duration timeout) {
-        return "";
-    }
-
-    @Override
-    public String getAndPersist(String key) {
-        return "";
-    }
 
     @Override
     public void set(String key, String value, long timeout, TimeUnit unit) {
@@ -111,6 +93,25 @@ public class EtcdRedisValueOperations implements ValueOperations<String, String>
         return null;
     }
 
+    @Override
+    public String getAndDelete(String key) {
+        return "";
+    }
+
+    @Override
+    public String getAndExpire(String key, long timeout, TimeUnit unit) {
+        return "";
+    }
+
+    @Override
+    public String getAndExpire(String key, Duration timeout) {
+        return "";
+    }
+
+    @Override
+    public String getAndPersist(String key) {
+        return "";
+    }
 
     @Override
     public String getAndSet(String key, String value) {

@@ -1,6 +1,0 @@
-spring:
-  application:
-    name: adapter_demo
-shengsheng:
-  etcd:
-    url: http://127.0.0.1:2379

@@ -1,14 +1,13 @@
-package club.shengsheng.adapter_demo;
-
+package tech.insight.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AdapterDemoApplication {
+public class AppApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AdapterDemoApplication.class, args);
+        SpringApplication.run(AppApplication.class, args);
     }
 
 }
